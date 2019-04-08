@@ -111,8 +111,11 @@ int encodeModbusPaket(modbus_packet_t packet, uint8_t* buffer) {
 
 modbus_packet_t getNextModbusPacket(modbus_decoder_t in_decoder) {
     modbus_decoder_it* decoder = (modbus_decoder_it*) in_decoder;
-    modbus_packet_t packet = decoder->first_packet->packet;
-    decoder->first_packet = decoder->first_packet->next;
+    modbus_dll_item* item = decoder->first_packet;
 
+    modbus_packet_t packet = item->packet;
+    decoder->first_packet = item->next;
+
+    free(item);
     return packet;
 }
